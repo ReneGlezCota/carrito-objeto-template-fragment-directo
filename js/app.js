@@ -1,102 +1,62 @@
-const carrito = document.getElementById("carrito");
-const template = document.getElementById("template");
-const footer = document.getElementById("footer");
-const templateFooter = document.getElementById("template-footer");
-const fragment = document.createDocumentFragment();
+const formulario = document.getElementById("formulario");
+const userName = document.getElementById("userName");
+const userEmail = document.getElementById("userEmail");
+const alertSuccess = document.getElementById("alertSuccess");
+const alertUserName = document.getElementById("alertName");
+const alertUserEmail = document.getElementById("alertEmail");
 
-document.addEventListener("click", (e) => {
-  if (e.target.matches(".card .btn-outline-primary")) {
-    agregarAlCarrito(e);
-  }
+const regUserName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
+const regUserEmail =
+  /^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/;
 
-  if (e.target.matches("#carrito .list-group-item .btn-success")) {
-    btnAgregar(e);
-  }
-  if (e.target.matches("#carrito .list-group-item .btn-danger")) {
-    btnQuitar(e);
-  }
-});
+const pintarMensajeExito = () => {
+  alertSuccess.classList.remove("d-none");
+  alertSuccess.textContent = "Mensaje enviado con exito";
+};
 
-let carritoObjeto = [];
-
-const agregarAlCarrito = (e) => {
-  const producto = {
-    titulo: e.target.dataset.fruta,
-    id: e.target.dataset.fruta,
-    precio: parseInt(e.target.dataset.precio),
-    cantidad: 1,
-  };
-
-  const indice = carritoObjeto.findIndex((item) => {
-    return item.id === producto.id;
+const pintarMensajeError = (errores) => {
+  errores.forEach((item) => {
+    item.tipo.classList.remove("d-none");
+    item.tipo.textContent = item.msg;
   });
+};
 
-  if (indice < 0) {
-    carritoObjeto.push(producto);
+formulario.addEventListener("submit", (e) => {
+  e.preventDefault();
+  alertSuccess.classList.add("d-none");
+
+  const errores = [];
+
+  if (!regUserName.test(userName.value) || !userName.value.trim()) {
+    userName.classList.add("is-invalid");
+
+    errores.push({
+      tipo: alertUserName,
+      msg: "Formato no valido en el campo nombre, solo letras",
+    });
   } else {
-    carritoObjeto[indice].cantidad++;
+    userName.classList.remove("is-invalid");
+    userName.classList.add("is-valid");
+    alertUserName.classList.add("d-none");
   }
 
-  pintarCarrito();
-};
+  if (!regUserEmail.test(userEmail.value || !userEmail.value.trim())) {
+    userEmail.classList.add("is-invalid");
 
-const pintarCarrito = () => {
-  carrito.textContent = "";
-
-  carritoObjeto.forEach((item) => {
-    const clone = template.content.cloneNode(true);
-    clone.querySelector(".text-white .lead").textContent = item.titulo;
-    clone.querySelector(".badge").textContent = item.cantidad;
-    clone.querySelector("div .lead span").textContent =
-      item.precio * item.cantidad;
-
-    clone.querySelector(".btn-danger").dataset.id = item.id;
-    clone.querySelector(".btn-success").dataset.id = item.id;
-
-    fragment.appendChild(clone);
-  });
-
-  carrito.appendChild(fragment);
-  pintarFooter();
-};
-
-const pintarFooter = () => {
-  footer.textContent = "";
-
-  const total = carritoObjeto.reduce(
-    (acc, current) => acc + current.cantidad * current.precio,
-    0
-  );
-
-  if (total > 0) {
-    const clone = templateFooter.content.cloneNode(true);
-    clone.querySelector("span").textContent = total;
-    footer.appendChild(clone);
+    errores.push({
+      tipo: alertUserEmail,
+      msg: "Formato no valido en el campo email, escriba un correo valido",
+    });
+  } else {
+    userEmail.classList.remove("is-invalid");
+    userEmail.classList.add("is-valid");
+    alertUserEmail.classList.add("d-none");
   }
-};
 
-const btnAgregar = (e) => {
-  carritoObjeto = carritoObjeto.map((item) => {
-    if (item.id === e.target.dataset.id) {
-      item.cantidad++;
-    }
-    return item;
-  });
-
-  pintarCarrito();
-};
-
-const btnQuitar = (e) => {
-  carritoObjeto = carritoObjeto.filter((item) => {
-    if (item.id === e.target.dataset.id) {
-      if (item.cantidad > 0) {
-        item.cantidad--;
-        if (item.cantidad === 0) return;
-        return item;
-      }
-    } else {
-      return item;
-    }
-  });
-  pintarCarrito();
-};
+  if (errores.length !== 0) {
+    pintarMensajeError(errores);
+    return;
+  }
+  console.log("Formulario enviado con exito");
+  pintarMensajeExito();
+});
