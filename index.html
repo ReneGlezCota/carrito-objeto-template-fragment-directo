@@ -14,28 +14,58 @@
   </head>
   <body>
     <div class="container my-5">
-      <!-- Spinner cargando -->
-      <section class="d-flex align-items-center d-none" id="loading">
-        <strong>Cargando....</strong>
-        <div
-          class="spinner-border ms-auto"
-          role="status"
-          aria-hidden="true"
-        ></div>
+      <h1>Estudiantes y Profesores</h1>
+      <form id="formulario" action="">
+        <input
+          type="text"
+          class="form-control mb-2"
+          value="Juanito"
+          name="nombre"
+          placeholder="Ingrese nombre"
+          required
+        />
+        <input
+          type="number"
+          class="form-control mb-2"
+          value="25"
+          name="edad"
+          placeholder="Ingrese edad"
+          required
+        />
+        <select class="form-select mb-2" name="opcion">
+          <option value="Estudiante">Estudiante</option>
+          <option value="Profesor">Profesor</option>
+        </select>
+
+        <button class="btn btn-primary mt-2" type="submit">Agregar</button>
+      </form>
+
+      <section class="row mt-3">
+        <div class="col-6" id="cardsEstudiante"></div>
+        <div class="col-6" id="cardsProfesor"></div>
       </section>
-      <section class="row" id="card-dinamicas"></section>
     </div>
 
-    <template id="template-card">
-      <article class="col-12 col-md-6 col-lg-3 mb-3">
-        <div class="card text-center shadow">
-          <img src="" alt="" class="card-img-top" />
-          <div class="card-body">
-            <h5 class="card-title text-primary lead">
-              El nombre del personaje
-            </h5>
-            <p class="lead text-secondary">Human</p>
-          </div>
+    <template id="template-estudiante">
+      <article class="card mb-2">
+        <div class="card-body">
+          <h5>
+            <span class="text-primary">Nombre</span>
+            <span class="badge">Aprobado</span>
+          </h5>
+          <h6></h6>
+          <p class="lead"></p>
+          <button class="btn btn-success">Aprobar</button>
+          <button class="btn btn-danger">Reprobar</button>
+        </div>
+      </article>
+    </template>
+    <template id="template-profesor">
+      <article class="card mb-2 bg-dark text-white">
+        <div class="card-body">
+          <h5>Nombre</h5>
+          <h6></h6>
+          <p class="lead"></p>
         </div>
       </article>
     </template>
