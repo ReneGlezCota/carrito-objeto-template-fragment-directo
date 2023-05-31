@@ -3,24 +3,31 @@ const cardsEstudiante = document.getElementById("cardsEstudiante");
 const cardsProfesor = document.getElementById("cardsProfesor");
 const templateEstudiante = document.getElementById("template-estudiante");
 const templateProfesor = document.getElementById("template-profesor");
+const alert = document.querySelector(".alert");
 
 const estudiantes = [];
 const profesores = [];
 let idGlobal = 0;
+
 formulario.addEventListener("submit", (e) => {
   e.preventDefault();
+  alert.classList.add("d-none");
 
   const datos = new FormData(formulario);
   const [nombre, edad, opcion] = [...datos.values()];
-  const id = generateId(idGlobal);
+
+  if (!nombre.trim() || !edad.trim() || !opcion.trim()) {
+    alert.classList.remove("d-none");
+    return;
+  }
 
   if (opcion === "Estudiante") {
-    const estudiante = new Estudiante(id, nombre, edad);
+    const estudiante = new Estudiante(nombre, edad);
 
     estudiantes.push(estudiante);
     Persona.pintarPersonaUI(estudiantes, opcion);
   } else if (opcion === "Profesor") {
-    const profesor = new Profesor(id, nombre, edad);
+    const profesor = new Profesor(nombre, edad);
 
     profesores.push(profesor);
     Persona.pintarPersonaUI(profesores, opcion);
@@ -52,8 +59,8 @@ document.addEventListener("click", (e) => {
 });
 
 class Persona {
-  constructor(id, nombre, edad) {
-    this.id = id;
+  constructor(nombre, edad) {
+    this.id = generateId(idGlobal);
     this.nombre = nombre;
     this.edad = edad;
   }
