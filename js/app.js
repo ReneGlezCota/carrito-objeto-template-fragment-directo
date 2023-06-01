@@ -150,3 +150,19 @@ function generateId(id) {
   return idGlobal;
   // return Math.floor(Math.random() * id) + 1;
 }
+
+//Funcion IIFE
+// (() => {
+//   const fruta = "🍎";
+//   console.log(fruta);
+// })();
+
+//Importar desde otro archivo
+import pintarPlatano, { Fruta, fresa } from "./frutas.js";
+// import melon from "./frutas.js";
+// console.log(melon);
+
+pintarPlatano();
+fresa();
+const cereza = new Fruta("🍒");
+console.log(cereza);
